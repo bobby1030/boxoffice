@@ -10,9 +10,11 @@ class BoxOfficeDaily:
         # Convert numpy's datetime64 to datetime.date
         if type(date) == numpy.datetime64:
             date = date.astype(datetime.date)
+        elif type(date) == str:
+            date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
 
         self.date = date
-        self.dateStr = date.strftime("%Y/%m/%d")
+        self.dateStr = date.strftime("%Y-%m-%d")
         self.weekday = date.strftime("%a")
         self.response = None
 
@@ -49,7 +51,8 @@ class BoxOfficeDaily:
                 print(f"Failed to fetch box office: {self.dateStr}")
                 print(e)
                 return None
-
+        else:
+            print(f"Already fetched box office: {self.dateStr}. Skpping.")
         return self.response
 
     def __repr__(self) -> str:
